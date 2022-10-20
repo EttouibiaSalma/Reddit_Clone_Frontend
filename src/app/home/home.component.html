@@ -4,7 +4,7 @@
       <hr />
       <div class="col-md-9">
         <!-- Display Posts-->
-        <div class="row post">
+        <div class="row post" *ngFor="let post of posts$">
           <!-- Section to Display Votes-->
           <div class="col-md-1">
             <div class="d-flex flex-column votebox">
@@ -16,7 +16,7 @@
                   [style.color]="upvoteColor"
                 ></fa-icon>
               </div>
-              <div class="p-2 votecount"></div>
+              <div class="p-2 votecount">{{ post.voteCount }}</div>
               <div class="p-2">
                 <fa-icon
                   (click)="downvotePost()"
@@ -32,19 +32,21 @@
           <div class="col-md-11">
             <span class="subreddit-info">
               <span class="subreddit-text"
-                ><a class="posturl" routerLink=""></a
-              ></span>
+                ><a class="posturl" routerLink="">{{
+                  post.subredditName
+                }}</a></span
+              >
               <span>
                 . Posted by
                 <a class="username" routerLink="/user/{{ post.userName }}">{{
                   post.userName
                 }}</a></span
               >
-              <span> . </span>
+              <span> . {{ post.duration }}</span>
             </span>
             <hr />
             <div class="post-title">
-              <a class="postname" href="">{{ post.postName }}</a>
+              <a class="postname" href="{{ post.url }}">{{ post.postName }}</a>
             </div>
             <div>
               <p class="post-text">{{ post.description }}</p>
