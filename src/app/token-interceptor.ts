@@ -16,13 +16,16 @@ export class TokenInterceptor implements HttpInterceptor{
         if (req.url.indexOf('refresh') !== -1 || req.url.indexOf('login') !== -1) {
             return next.handle(req);
         }
-        return next.handle(this.addToken(req, token)).pipe(catchError(error => {
+        if(token){
+            return next.handle(this.addToken(req, token)).pipe(catchError(error => {
             if (error instanceof HttpErrorResponse && error.status === 403) {
                 return this.handleAuthErrors(req, next);
             } else {
                 return throwError(error);
             }
-        }));
+            }));
+        }
+        return next.handle(req);
     }
     addToken(req: HttpRequest<any>, token: any) {
         return req.clone({
