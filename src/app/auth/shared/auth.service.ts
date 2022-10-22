@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { signupRequestPayload } from '../signup/signup-request.payload';
-import { map, Observable, tap } from 'rxjs';
+import { map, Observable, tap, throwError } from 'rxjs';
 import { LoginRequestPayload } from '../login/login-request.payload';
 import { LoginResponsePayload } from '../login/login-response.payload';
 import { LocalStorageService } from 'ngx-webstorage';
@@ -10,6 +10,9 @@ import { LocalStorageService } from 'ngx-webstorage';
   providedIn: 'root'
 })
 export class AuthService {
+
+  @Output() loggedIn: EventEmitter<boolean> = new EventEmitter();
+  @Output() username: EventEmitter<String> = new EventEmitter();
 
   refreshTokenPayload = {
     refreshToken: this.getRefreshToken(),
@@ -28,6 +31,9 @@ export class AuthService {
       this.localStorage.store("refreshToken", data.refreshToken);
       this.localStorage.store("expireAt", data.expireAt);
       this.localStorage.store("username", data.username);
+        
+      this.loggedIn.emit(true);
+      this.username.emit(data.username);
       return true;
     }));
   }
@@ -61,7 +67,17 @@ export class AuthService {
   }
 
   logout() {
-    return this.httpClient.post("http://localhost:8080/api/auth/logout", this.getRefreshToken);
+    this.httpClient.post('http://localhost:8080/api/auth/logout', this.refreshTokenPayload,
+      { responseType: 'text' })
+      .subscribe(data => {
+        console.log(data);
+      }, error => {
+        throwError(error);
+      })
+    this.localStorage.clear('authenticationToken');
+    this.localStorage.clear('username');
+    this.localStorage.clear('refreshToken');
+    this.localStorage.clear('expiresAt');
   }
 
 }

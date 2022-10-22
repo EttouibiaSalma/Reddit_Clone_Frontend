@@ -17,8 +17,8 @@ export class HeaderComponent implements OnInit {
   constructor(private authService:AuthService, private router:Router) { }
 
   ngOnInit(): void {
-    this.isLoggedIn = this.authService.isLoggedIn();
-    this.username = this.authService.getUserName();
+    this.authService.loggedIn.subscribe((data:boolean) => this.isLoggedIn = data)
+    this.authService.username.subscribe((data:String) => this.username = data) ;
   }
 
   goToUserProfile() {
@@ -27,6 +27,9 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.authService.logout();
+    this.router.navigateByUrl('').then(() => {
+      window.location.reload();
+    })
   }
 
 }
