@@ -1,4 +1,4 @@
-<div class="row post" *ngFor="let post of posts$">
+<div class="row post" *ngFor="let post of posts">
   <app-vote-button [post]="post"></app-vote-button>
   <!-- Section to Display Post Information-->
   <div class="col-md-11">
@@ -24,7 +24,7 @@
     <hr />
     <span>
       <a class="btnCommments" role="button">
-        <fa-icon [icon]="faComments"></fa-icon>
+        <fa-icon [icon]="faComment"></fa-icon>
         Comments({{ post.commentCount }})
       </a>
       <button class="login" (click)="goToPost(post.id)">Read Post</button>

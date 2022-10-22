@@ -27,7 +27,7 @@ export class PostService {
     return this.http.post("http://localhost:8080/api/comment/", comment);
   }
 
-  getAllCommentsForPost(postId: number): Observable<CommentPayload[]> {
-    return this.http.get<CommentPayload[]>("http://localhost:8080/api/comment/post/" + postId);
+  getAllPostsForUser(name: String): Observable<PostModel[]> {
+    return this.http.get<PostModel[]>("http://localhost:8080/api/posts/user/" + name);
   }
 }

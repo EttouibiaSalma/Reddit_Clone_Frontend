@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { throwError } from 'rxjs';
 import { CommentPayload } from 'src/app/comment/comment-payload';
+import { CommentService } from 'src/app/comment/comment.service';
 import { PostModel } from 'src/app/shared/post-model';
 import { PostService } from 'src/app/shared/post.service';
 
@@ -18,7 +19,8 @@ export class ViewPostComponent implements OnInit {
   comment: CommentPayload;
   comments: CommentPayload[];
 
-  constructor(private postService: PostService, private activatedRoute: ActivatedRoute) {
+  constructor(private postService: PostService, private activatedRoute: ActivatedRoute,
+    private commentService: CommentService) {
     this.postId = this.activatedRoute.snapshot.params['id'];
     this.postService.getPost(this.postId).subscribe(data => {
       this.post = data;
@@ -57,7 +59,7 @@ export class ViewPostComponent implements OnInit {
     })
   }
   getCommentsForPost() {
-    this.postService.getAllCommentsForPost(this.comment.postId);
+    this.commentService.getAllCommentsForPost(this.comment.postId);
   }
 
 }

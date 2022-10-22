@@ -56,4 +56,12 @@ export class AuthService {
     return this.localStorage.retrieve('refreshToken');
   }
 
+  isLoggedIn(): boolean {
+    return this.getJwtToken != null;
+  }
+
+  logout() {
+    return this.httpClient.post("http://localhost:8080/api/auth/logout", this.getRefreshToken);
+  }
+
 }
